@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NeetApp - Core Platform</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <div id="app-container" class="glass-panel">
+
+        
+
+        <header id="x-global-header" style="display: none;">
+
+            <div class="header-top-row">
+
+                <div id="header-profile-trigger" onclick="viewSelfProfile()">
+
+                    <img id="header-user-avatar" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='gray'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>">
+
+                </div>
+
+                <div id="x-app-logo">✨ NEET AI</div>
+
+                <div class="header-right-actions">
+
+                    <span class="upgrade-badge">NYSC P10</span>
+
+                </div>
+
+            </div>
+
+            <div class="header-tabs-row">
+
+                <div class="feed-tab active-tab" id="tab-for-you" onclick="switchFeedTab('foryou')">For you</div>
+
+                <div class="feed-tab" id="tab-following" onclick="switchFeedTab('following')">Following</div>
+
+                <div class="feed-tab" id="tab-ai-history" onclick="switchFeedTab('aihistory')">AI History</div>
+
+            </div>
+
+        </header>
+
+        <div id="main-content">
+
+            
+
+            <div id="auth-container">
+
+                <div id="login-view">
+
+                    <h2 class="auth-title">Log In to NeetApp</h2>
+
+                    <form id="login-form" onsubmit="event.preventDefault(); handleLoginSubmit();">
+
+                        <div class="form-group">
+
+                            <label>Country Code</label>
+
+                            <select id="login-country">
+
+                                <option value="+1">United States (+1)</option>
+
+                                <option value="+234">Nigeria (+234)</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Phone Number</label>
+
+                            <input type="tel" id="login-phone" placeholder="Enter phone number" required>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Password</label>
+
+                            <input type="password" id="login-password" placeholder="123456" required>
+
+                        </div>
+
+                        <button type="submit" class="action-btn">Log In</button>
+
+                    </form>
+
+                    <p class="auth-switch-text">New to NeetApp? <span onclick="toggleAuthView('signup')">Sign Up Here</span></p>
+
+                </div>
+
+                <div id="signup-view" style="display: none;">
+
+                    <h2 class="auth-title">Create Account</h2>
+
+                    <form id="signup-form" onsubmit="event.preventDefault(); handleSignupSubmit();">
+
+                        <div class="form-group">
+
+                            <label>Select Allocated US Line</label>
+
+                            <select id="signup-phone-allocated">
+
+                                <option value="+12025550143">+1 (202) 555-0143</option>
+
+                                <option value="+12025550199">+1 (202) 555-0199</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Set Registration Password</label>
+
+                            <input type="password" id="signup-password" placeholder="234567" required>
+
+                        </div>
+
+                        <button type="submit" class="action-btn">Register Node</button>
+
+                    </form>
+
+                    <p class="auth-switch-text">Already registered? <span onclick="toggleAuthView('login')">Log In Here</span></p>
+
+                </div>
+
+            </div>
+
+            <div id="feed-container" style="display: none;">
+
+                <div id="posts-container"></div>
+
+            </div>
+
+            <div id="profile-container" style="display: none;">
+
+                <div class="profile-banner"></div>
+
+                <div class="profile-avatar-row">
+
+                    <img id="user-avatar-img" src="">
+
+                    <button type="button" id="edit-profile-action-btn" class="edit-profile-trigger-btn" onclick="openProfileEditMode()">Edit profile</button>
+
+                    <button type="button" id="follow-profile-action-btn" class="follow-toggle-btn" style="display:none;" onclick="handleFollowToggle(this)">Follow</button>
+
+                </div>
+
+                
+
+                <div id="profile-info-display">
+
+                    <h2 id="display-name">Enason</h2>
+
+                    <h4 id="display-username">@enason_dev</h4>
+
+                    <p id="display-bio">Airtel</p>
+
+                    <p id="display-address">📍 Lagos Node</p>
+
+                    <p id="display-phone">📞 Code</p>
+
+                    
+
+                    <div class="profile-stats">
+
+                        <span onclick="showConnectionsModal('following')"><strong id="stat-following-cnt">0</strong> Following</span>
+
+                        <span onclick="showConnectionsModal('followers')"><strong id="stat-followers-cnt">0</strong> Followers</span>
+
+                    </div>
+
+                </div>
+
+                <div class="settings-dropdown-wrapper" id="self-settings-wrapper">
+
+                    <button type="button" id="toggle-settings-btn" onclick="toggleSettingsMenu(event)">⚙️ Account Options ▼</button>
+
+                    <div id="profile-settings-dropdown" style="display: none;">
+
+                        <button type="button" onclick="handleLogout()">Log Out</button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div id="edit-profile-container" style="display: none;">
+
+                <h2 class="view-title">Modify Profile Data</h2>
+
+                <form id="edit-profile-form" onsubmit="event.preventDefault(); saveProfileChanges();">
+
+                    <div class="form-group">
+
+                        <label>Display Name</label>
+
+                        <input type="text" id="edit-name" required>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Handle Username</label>
+
+                        <input type="text" id="edit-username" required>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Bio Context</label>
+
+                        <textarea id="edit-bio" rows="2"></textarea>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Location Base</label>
+
+                        <input type="text" id="edit-address">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label class="custom-file-upload">
+
+                            📸 Upload New Profile Picture
+
+                            <input type="file" id="edit-avatar" accept="image/*" onchange="processAvatarFile(this)">
+
+                        </label>
+
+                        <div class="preview-box">
+
+                            <img id="edit-avatar-preview" src="" style="display: none;">
+
+                        </div>
+
+                    </div>
+
+                    <div class="btn-group">
+
+                        <button type="submit" class="action-btn">Save</button>
+
+                        <button type="button" class="cancel-btn" onclick="navigationRouter('feed')">Cancel</button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div id="search-container" style="display: none;">
+
+                <h2 class="view-title">Search Channels</h2>
+
+                <div class="search-input-group">
+
+                    <input type="text" id="search-input" placeholder="Search (e.g. Sector Labx)...">
+
+                    <button type="button" onclick="triggerDirectorySearch()">Go</button>
+
+                </div>
+
+                <div id="search-results-display">
+
+                    <p id="search-status-message">Type to discover platforms inside the network.</p>
+
+                </div>
+
+            </div>
+
+            <div id="ai-container" style="display: none;">
+
+                <div class="ai-status-indicator">⚡ NEET CORE AI DIAGNOSTIC ENVIRONMENT</div>
+
+                <div id="ai-chat-box">
+
+                    <div class="ai-msg">
+
+                        <strong>🤖 System AI Core:</strong> Production server cluster active. Enter diagnostic parameters or query script trends.
+
+                    </div>
+
+                </div>
+
+                <div class="chat-input-row">
+
+                    <input type="text" id="ai-input" placeholder="Query processing matrix...">
+
+                    <button type="button" onclick="sendAiMessage()">Send</button>
+
+                </div>
+
+            </div>
+
+            <div id="notifications-container" style="display: none;">
+
+                <h2 class="view-title">Activity Feed</h2>
+
+                <div id="notifications-stream-target">
+
+                    <div class="notification-item active-alert">
+
+                        <p>⚡ <strong>Sector LabX:</strong> Video compilation tracking target complete (2m 55s).</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div id="messages-container" style="display: none;">
+
+                <h2 class="view-title">Direct Messages</h2>
+
+                
+
+                <div id="dm-threads-list"></div>
+
+                <div id="active-dm-chat-window" style="display: none;">
+
+                    <div class="chat-window-header">
+
+                        <button type="button" class="back-link-btn" onclick="closeActiveDmWindow()">◀ Back</button>
+
+                        <h4 id="dm-chat-target-title">User Chat</h4>
+
+                    </div>
+
+                    <div id="dm-chat-messages-box"></div>
+
+                    <div class="chat-input-row">
+
+                        <input type="text" id="dm-chat-input-field" placeholder="Send a message...">
+
+                        <button type="button" onclick="sendDirectMessage()">Send</button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="connections-modal-overlay" class="modal-layer" style="display: none;">
+
+            <div class="modal-content glass-panel">
+
+                <div class="modal-header">
+
+                    <h3 id="connections-modal-title">Network Contacts</h3>
+
+                    <span class="close-modal-x" onclick="closeConnectionsModal()">&times;</span>
+
+                </div>
+
+                <div id="connections-modal-list-body"></div>
+
+            </div>
+
+        </div>
+
+        <div id="share-modal-overlay" class="modal-layer" style="display: none;" onclick="closeShareModal()">
+
+            <div class="modal-content glass-panel share-sheet-drawer" onclick="event.stopPropagation()">
+
+                <div class="modal-header">
+
+                    <h3>Forward Post To...</h3>
+
+                    <span class="close-modal-x" onclick="closeShareModal()">&times;</span>
+
+                </div>
+
+                <div id="share-active-threads-list"></div>
+
+            </div>
+
+        </div>
+
+        <nav id="x-global-footer-dock" style="display: none;">
+
+            <div class="dock-item" id="dock-home-trigger" onclick="navigationRouter('feed')">🏠</div>
+
+            <div class="dock-item" id="dock-search-trigger" onclick="navigationRouter('search')">🔍</div>
+
+            <div class="dock-item" id="dock-ai-trigger" onclick="navigationRouter('ai')"><span class="ai-gradient-text">AI</span></div>
+
+            <div class="dock-item" id="dock-notifications-trigger" onclick="navigationRouter('notifications')">🔔</div>
+
+            <div class="dock-item" id="dock-messages-trigger" onclick="navigationRouter('messages')">✉️</div>
+
+        </nav>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
+
